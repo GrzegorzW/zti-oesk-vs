@@ -18,13 +18,15 @@ $redisManager = new RedisManager($host, $redisPort);
 $memcachedTester = new Tester($memcachedManager);
 $redisTester = new Tester($redisManager);
 
-$iterations = 1000000;
+$iterations = 100000;
 
-var_dump('GET:');
-$memcachedResult = $memcachedTester->getValueTest($iterations);
-var_dump($memcachedResult->getDuration());
-$redisResult = $redisTester->getValueTest($iterations);
-var_dump($redisResult->getDuration());
+printf("ITERATIONS: %d\n", $iterations);
+
+echo "INCREMENTATION:\n";
+$memcachedResult = $memcachedTester->incrementationTest($iterations);
+echo $memcachedResult->getDuration() . "\n";
+$redisResult = $redisTester->incrementationTest($iterations);
+echo $redisResult->getDuration() . "\n";
 
 $diff = $memcachedResult->getDuration() - $redisResult->getDuration();
 
@@ -36,15 +38,35 @@ if ($diff === 0) {
     $result = 'REDIS WYGRAŁ';
 }
 
-var_dump($result);
+echo $result . "\n";
+
+
+
+echo "GET: \n";
+$memcachedResult = $memcachedTester->getValueTest($iterations);
+echo $memcachedResult->getDuration() . "\n";
+$redisResult = $redisTester->getValueTest($iterations);
+echo $redisResult->getDuration() . "\n";
+
+$diff = $memcachedResult->getDuration() - $redisResult->getDuration();
+
+if ($diff === 0) {
+    $result = 'REMIS';
+} else if ($diff < 0) {
+    $result = 'MEMECACHED WYGRAŁ';
+} else {
+    $result = 'REDIS WYGRAŁ';
+}
+
+echo $result . "\n";
 
 //=================================
 
-var_dump('INCREMENTATION:');
+echo "INCREMENTATION:\n";
 $memcachedResult = $memcachedTester->incrementationTest($iterations);
-var_dump($memcachedResult->getDuration());
+echo $memcachedResult->getDuration() . "\n";
 $redisResult = $redisTester->incrementationTest($iterations);
-var_dump($redisResult->getDuration());
+echo $redisResult->getDuration() . "\n";
 
 $diff = $memcachedResult->getDuration() - $redisResult->getDuration();
 
@@ -56,4 +78,4 @@ if ($diff === 0) {
     $result = 'REDIS WYGRAŁ';
 }
 
-var_dump($result);
+echo $result . "\n";

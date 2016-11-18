@@ -39,18 +39,18 @@ class Tester
     {
         $this->checkIterations($iterations);
 
-        var_dump($this->keyValueManagerName);
+        echo $this->keyValueManagerName . "\n";
 
         $key = $this->getRandomChars();
         $value = $this->getRandomChars();
 
         $this->keyValueManager->set($key, $value);
 
-        $this->stopwatch->start($this->keyValueManagerName);
+        $this->stopwatch->start($key);
         for ($i = 0; $i < $iterations; $i++) {
             $this->keyValueManager->get($key);
         }
-        $this->stopwatch->stop($this->keyValueManagerName);
+        $this->stopwatch->stop($key);
 
         if ($this->keyValueManager->get($key) !== $value) {
             throw new TestException('Invalid test result.');
@@ -58,7 +58,7 @@ class Tester
 
         $this->keyValueManager->delete($key);
 
-        return $this->stopwatch->getEvent($this->keyValueManagerName);
+        return $this->stopwatch->getEvent($key);
     }
 
     /**
@@ -71,16 +71,16 @@ class Tester
     {
         $this->checkIterations($iterations);
 
-        var_dump($this->keyValueManagerName);
+        echo $this->keyValueManagerName . "\n";
 
         $key = $this->getRandomChars();
         $this->keyValueManager->set($key, '0');
 
-        $this->stopwatch->start($this->keyValueManagerName);
+        $this->stopwatch->start($key);
         for ($i = 0; $i < $iterations; $i++) {
             $this->keyValueManager->increment($key);
         }
-        $this->stopwatch->stop($this->keyValueManagerName);
+        $this->stopwatch->stop($key);
 
         if ((int)$this->keyValueManager->get($key) !== $iterations) {
             throw new TestException('Invalid test result.');
@@ -88,7 +88,7 @@ class Tester
 
         $this->keyValueManager->delete($key);
 
-        return $this->stopwatch->getEvent($this->keyValueManagerName);
+        return $this->stopwatch->getEvent($key);
     }
 
     /**
