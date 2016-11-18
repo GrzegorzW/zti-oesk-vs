@@ -1,0 +1,19 @@
+{
+    "name": "grzegorzw/zti-oesk-vs",
+    "description": "memcached vs redis",
+    "authors": [
+        {
+            "name": "Grzegorz Waszkowiak",
+            "email": "grzegorz.waszkowiak@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.0",
+        "symfony/stopwatch": "dev-master"
+    }
+}
