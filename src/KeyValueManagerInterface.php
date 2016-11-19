@@ -10,4 +10,6 @@ interface KeyValueManagerInterface
     public function get(string $key);
     public function delete(string $key);
     public function increment(string $key);
+    public function getStorageName(): string;
+    public function getStorageVersion(): string;
 }

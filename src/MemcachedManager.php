@@ -57,4 +57,20 @@ class MemcachedManager implements KeyValueManagerInterface
     {
         $this->memcached->increment($key);
     }
+
+    /**
+     * @return string
+     */
+    public function getStorageName(): string
+    {
+        return 'Memcached';
+    }
+
+    /**
+     * @return string
+     */
+    public function getStorageVersion(): string
+    {
+        return array_values($this->memcached->getVersion())[0];
+    }
 }

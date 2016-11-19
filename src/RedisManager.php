@@ -55,4 +55,20 @@ class RedisManager implements KeyValueManagerInterface
     {
         $this->redis->incr($key);
     }
+
+    /**
+     * @return string
+     */
+    public function getStorageName(): string
+    {
+        return 'Redis';
+    }
+
+    /**
+     * @return string
+     */
+    public function getStorageVersion(): string
+    {
+        return $this->redis->info()['redis_version'];
+    }
 }
