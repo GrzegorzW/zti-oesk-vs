@@ -1,9 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace App;
+namespace App\Manager;
 
 use Redis;
+
 
 class RedisManager implements KeyValueManagerInterface
 {
@@ -70,5 +71,50 @@ class RedisManager implements KeyValueManagerInterface
     public function getStorageVersion(): string
     {
         return $this->redis->info()['redis_version'];
+    }
+
+    /**
+     * @param array $items
+     */
+    public function setMulti(array $items)
+    {
+        $this->redis->mset($items);
+    }
+
+    /**
+     * @param array $keys
+     * @return array
+     */
+    public function getMulti(array $keys)
+    {
+        return $this->redis->mget($keys);
+    }
+
+    /**
+     * @param array $keys
+     */
+    public function deleteMulti(array $keys)
+    {
+        $this->redis->del($keys);
+    }
+
+    public function addVisitor(string $visitor)
+    {
+        $this->redis->pfAdd(KeyValueManagerInterface::VISITOR_COUNTER_NAME, [$visitor]);
+    }
+
+    public function countUniqueVisitors(): int
+    {
+        return $this->redis->pfCount(KeyValueManagerInterface::VISITOR_COUNTER_NAME);
+    }
+
+    public function flush()
+    {
+        $this->redis->flushAll();
+    }
+
+    public function getUsedMemory(): int
+    {
+        return $this->redis->info()['used_memory'];
     }
 }

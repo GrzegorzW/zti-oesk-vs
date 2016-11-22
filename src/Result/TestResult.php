@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace App;
+namespace App\Result;
+
+use App\Manager\KeyValueManagerInterface;
 
 
-use Symfony\Component\Stopwatch\StopwatchEvent;
-
-class TestResult
+abstract class TestResult
 {
     /** @var string */
     private $name;
@@ -14,16 +14,13 @@ class TestResult
     private $iterations;
     /** @var string */
     private $storageName;
-    /** @var int */
-    private $duration;
     /** @var string */
     private $storageVersion;
 
-    public function __construct(string $name, int $iterations, KeyValueManagerInterface $manager, StopwatchEvent $event)
+    public function __construct(string $name, int $iterations, KeyValueManagerInterface $manager)
     {
         $this->setName($name);
         $this->setIterations($iterations);
-        $this->duration = $event->getDuration();
         $this->storageName = $manager->getStorageName();
         $this->storageVersion = $manager->getStorageVersion();
     }
@@ -66,14 +63,6 @@ class TestResult
     public function getStorageName(): string
     {
         return $this->storageName;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDuration(): int
-    {
-        return $this->duration;
     }
 
     /**

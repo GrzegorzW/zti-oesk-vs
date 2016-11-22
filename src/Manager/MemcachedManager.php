@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace App;
+namespace App\Manager;
 
 use Memcached;
 
@@ -72,5 +72,58 @@ class MemcachedManager implements KeyValueManagerInterface
     public function getStorageVersion(): string
     {
         return array_values($this->memcached->getVersion())[0];
+    }
+
+    /**
+     * @param array $items
+     */
+    public function setMulti(array $items)
+    {
+        $this->memcached->setMulti($items);
+    }
+
+    /**
+     * @param array $keys
+     * @return array
+     */
+    public function getMulti(array $keys)
+    {
+        return $this->memcached->getMulti($keys);
+    }
+
+    /**
+     * @param array $keys
+     */
+    public function deleteMulti(array $keys)
+    {
+        $this->memcached->deleteMulti($keys);
+    }
+
+    /**
+     * @param string $visitor
+     */
+    public function addVisitor(string $visitor)
+    {
+        if ($this->memcached->add($visitor, '')) {
+            $this->memcached->increment(KeyValueManagerInterface::VISITOR_COUNTER_NAME, 1, 0);
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function countUniqueVisitors(): int
+    {
+        return (int)$this->memcached->get(KeyValueManagerInterface::VISITOR_COUNTER_NAME);
+    }
+
+    public function flush()
+    {
+        $this->memcached->flush();
+    }
+
+    public function getUsedMemory(): int
+    {
+        return reset($this->memcached->getStats())['bytes'];
     }
 }

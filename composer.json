@@ -14,6 +14,7 @@
     },
     "require": {
         "php": "^7.0",
-        "symfony/stopwatch": "dev-master"
+        "symfony/stopwatch": "dev-master",
+        "ukko/phpredis-phpdoc": "dev-master"
     }
 }

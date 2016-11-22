@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-use App\MemcachedManager;
-use App\RedisManager;
-use App\Tester;
+use App\Manager\MemcachedManager;
+use App\Manager\RedisManager;
+use App\MemoryTester;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -14,10 +14,21 @@ $redisPort = 6379;
 
 $managers = [new RedisManager($host, $redisPort), new MemcachedManager($host, $memcachedPort)];
 
-$tester = new Tester($managers, 1000000);
+$tester = new MemoryTester($managers, 100000);
 
-$result1 = $tester->getValueTest();
-$result2 = $tester->incrementationTest();
+//$managers[0]->getUsedMemory();
 
-var_dump($result1);
-var_dump($result2);
+/** @var MemcachedManager $m */
+$m = $managers[1];
+$m->getUsedMemory();
+
+
+//$result1 = $tester->getValueTest();
+//$result2 = $tester->incrementationTest();
+//$result2 = $tester->getMultiTest(1);
+
+$tester->uniqueVisitorsCounterTest();
+
+
+//var_dump($result1);
+//var_dump($result2);
