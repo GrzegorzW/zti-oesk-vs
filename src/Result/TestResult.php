@@ -8,8 +8,6 @@ use App\Manager\KeyValueManagerInterface;
 
 abstract class TestResult
 {
-    /** @var string */
-    private $name;
     /** @var int */
     private $iterations;
     /** @var string */
@@ -17,28 +15,11 @@ abstract class TestResult
     /** @var string */
     private $storageVersion;
 
-    public function __construct(string $name, int $iterations, KeyValueManagerInterface $manager)
+    public function __construct(int $iterations, KeyValueManagerInterface $manager)
     {
-        $this->setName($name);
         $this->setIterations($iterations);
         $this->storageName = $manager->getStorageName();
         $this->storageVersion = $manager->getStorageVersion();
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName(string $name)
-    {
-        $this->name = $name;
     }
 
     /**

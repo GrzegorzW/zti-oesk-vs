@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Tester;
 
 use App\Manager\KeyValueManagerInterface;
-use App\Result\VisitorsCountResult;
+use App\Result\VisitorsCounterTestResult;
 
 
 class MemoryTester extends Tester
@@ -12,6 +12,7 @@ class MemoryTester extends Tester
     /**
      * @param string $testName
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function uniqueVisitorsCounterTest($testName = 'uniqueVisitorsCounter'): array
     {
@@ -26,15 +27,13 @@ class MemoryTester extends Tester
             $memoryUsageAfter = $manager->getUsedMemory();
             $manager->flush();
 
-            $result = new VisitorsCountResult(
-                $testName,
+            $result = new VisitorsCounterTestResult(
                 $this->getIterations(),
                 $manager,
-                $manager->countUniqueVisitors(),
                 $memoryUsageBefore,
                 $memoryUsageAfter
             );
-            $this->addTestResult($result);
+            $this->addTestResult($testName, $result);
         }
 
         return $this->getTestResults($testName);

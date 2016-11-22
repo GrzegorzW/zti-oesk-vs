@@ -13,14 +13,13 @@ class MemoryTestResult extends TestResult
     /** @var int */
     private $memoryUsageAfter;
 
-    public function __construct(string $name,
-                                int $iterations,
+    public function __construct(int $iterations,
                                 KeyValueManagerInterface $manager,
                                 int $memoryUsageBefore,
                                 int $memoryUsageAfter
     )
     {
-        parent::__construct($name, $iterations, $manager);
+        parent::__construct($iterations, $manager);
         $this->memoryUsageBefore = $memoryUsageBefore;
         $this->memoryUsageAfter = $memoryUsageAfter;
     }
@@ -46,6 +45,6 @@ class MemoryTestResult extends TestResult
      */
     public function getDiff(): int
     {
-        return $this->memoryUsageAfter - $this->memoryUsageBefore;
+        return (int)abs($this->memoryUsageAfter - $this->memoryUsageBefore);
     }
 }

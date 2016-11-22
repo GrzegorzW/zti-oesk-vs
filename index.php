@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 use App\Manager\MemcachedManager;
 use App\Manager\RedisManager;
-use App\MemoryTester;
+use App\Tester\MemoryTester;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -14,18 +14,16 @@ $redisPort = 6379;
 
 $managers = [new RedisManager($host, $redisPort), new MemcachedManager($host, $memcachedPort)];
 
-$tester = new MemoryTester($managers, 100000);
-
-//$managers[0]->getUsedMemory();
-
-
-//$result1 = $tester->getValueTest();
-//$result2 = $tester->incrementationTest();
-//$result2 = $tester->getMultiTest(1);
+$tester = new MemoryTester($managers, 1000);
 
 $tester->uniqueVisitorsCounterTest();
 
-var_dump($tester->getAllTestsResults());
 
-//var_dump($result1);
-//var_dump($result2);
+var_dump($tester->getAllTestsResults());exit;
+
+/** @var \App\Result\VisitorsCounterTestResult $item */
+foreach ($tester->getAllTestsResults() as $item) {
+    var_dump($item->getStorageName());
+    var_dump($item->getDiff());
+    var_dump($item->getVisitorsCountError());
+}

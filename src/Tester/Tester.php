@@ -87,11 +87,12 @@ abstract class Tester
     }
 
     /**
+     * @param string $testName
      * @param TestResult $result
      */
-    public function addTestResult(TestResult $result)
+    public function addTestResult(string $testName, TestResult $result)
     {
-        $this->results[$result->getName()] = $result;
+        $this->results[$testName][] = $result;
     }
 
     /**

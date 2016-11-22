@@ -12,9 +12,9 @@ class TimeTestResult extends TestResult
     /** @var int */
     private $duration;
 
-    public function __construct(string $name, int $iterations, KeyValueManagerInterface $manager, StopwatchEvent $event)
+    public function __construct(int $iterations, KeyValueManagerInterface $manager, StopwatchEvent $event)
     {
-        parent::__construct($name, $iterations, $manager);
+        parent::__construct($iterations, $manager);
         $this->duration = $event->getDuration();
     }
 

@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace App\Tester;
 
 use App\Manager\KeyValueManagerInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
 use App\Result\TimeTestResult;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 
 class TimeTester extends Tester
@@ -30,6 +30,7 @@ class TimeTester extends Tester
     /**
      * @param string $testName
      * @return array
+     * @throws \InvalidArgumentException
      * @throws TestException
      */
     public function getValueTest($testName = 'getValue'): array
@@ -52,8 +53,8 @@ class TimeTester extends Tester
                 throw new TestException('Invalid test result.');
             }
 
-            $result = new TimeTestResult($testName, $this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
-            $this->addTestResult($result);
+            $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
+            $this->addTestResult($testName, $result);
 
             $manager->delete($testingKey);
         }
@@ -64,6 +65,7 @@ class TimeTester extends Tester
     /**
      * @param string $testName
      * @return array
+     * @throws \InvalidArgumentException
      * @throws TestException
      */
     public function incrementationTest($testName = 'incrementation'): array
@@ -85,8 +87,8 @@ class TimeTester extends Tester
                 throw new TestException('Invalid test result.');
             }
 
-            $result = new TimeTestResult($testName, $this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
-            $this->addTestResult($result);
+            $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
+            $this->addTestResult($testName, $result);
 
             $manager->delete($testingKey);
         }
@@ -128,8 +130,8 @@ class TimeTester extends Tester
                 throw new TestException('Invalid test result.');
             }
 
-            $result = new TimeTestResult($testName, $this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
-            $this->addTestResult($result);
+            $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
+            $this->addTestResult($testName, $result);
 
             $manager->deleteMulti($items);
         }

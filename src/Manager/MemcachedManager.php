@@ -124,6 +124,6 @@ class MemcachedManager implements KeyValueManagerInterface
 
     public function getUsedMemory(): int
     {
-        return reset($this->memcached->getStats())['bytes'];
+        return current($this->memcached->getStats())['bytes'];
     }
 }
