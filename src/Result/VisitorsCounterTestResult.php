@@ -11,13 +11,14 @@ class VisitorsCounterTestResult extends MemoryTestResult
     private $visitorsCount;
 
     public function __construct(int $iterations,
+                                int $visitorsCount,
                                 KeyValueManagerInterface $manager,
                                 int $memoryUsageBefore,
                                 int $memoryUsageAfter
     )
     {
         parent::__construct($iterations, $manager, $memoryUsageBefore, $memoryUsageAfter);
-        $this->visitorsCount = $manager->countUniqueVisitors();
+        $this->visitorsCount = $visitorsCount;
     }
 
     /**
@@ -25,6 +26,6 @@ class VisitorsCounterTestResult extends MemoryTestResult
      */
     public function getVisitorsCountError(): float
     {
-        return (($this->getIterations() - $this->visitorsCount) / $this->getIterations()) * 100;
+        return (float)abs(($this->getIterations() - $this->visitorsCount) / $this->getIterations());
     }
 }

@@ -40,6 +40,7 @@ class TimeTester extends Tester
 
         /** @var KeyValueManagerInterface $manager */
         foreach ($this->getManagers() as $manager) {
+            $manager->flush();
             $manager->set($testingKey, $testingValue);
 
             $stopwatchName = $this->getRandomChars();
@@ -56,7 +57,7 @@ class TimeTester extends Tester
             $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
             $this->addTestResult($testName, $result);
 
-            $manager->delete($testingKey);
+            $manager->flush();
         }
 
         return $this->getTestResults($testName);
@@ -74,6 +75,7 @@ class TimeTester extends Tester
 
         /** @var KeyValueManagerInterface $manager */
         foreach ($this->getManagers() as $manager) {
+            $manager->flush();
             $manager->set($testingKey, '0');
 
             $stopwatchName = $this->getRandomChars();
@@ -90,7 +92,7 @@ class TimeTester extends Tester
             $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
             $this->addTestResult($testName, $result);
 
-            $manager->delete($testingKey);
+            $manager->flush();
         }
 
         return $this->getTestResults($testName);
@@ -116,6 +118,7 @@ class TimeTester extends Tester
 
         /** @var KeyValueManagerInterface $manager */
         foreach ($this->getManagers() as $manager) {
+            $manager->flush();
             $manager->setMulti($items);
             $keys = array_keys($items);
 
@@ -133,7 +136,43 @@ class TimeTester extends Tester
             $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
             $this->addTestResult($testName, $result);
 
-            $manager->deleteMulti($items);
+            $manager->flush();
+        }
+
+        return $this->getTestResults($testName);
+    }
+
+    /**
+     * @param string $testName
+     * @return array
+     * @throws \InvalidArgumentException
+     * @throws TestException
+     */
+    public function getRandomValuesTest($testName = 'getRandomValues'): array
+    {
+        $testingArray = [];
+        for ($i = 0; $i < $this->getIterations(); $i++) {
+            $testingArray[$this->getRandomChars()] = $this->getRandomChars();
+        }
+
+        /** @var KeyValueManagerInterface $manager */
+        foreach ($this->getManagers() as $manager) {
+            $manager->flush();
+            $manager->setMulti($testingArray);
+
+            $stopwatchName = $this->getRandomChars();
+            $this->stopwatch->start($stopwatchName);
+            foreach ($testingArray as $key => $value) {
+                if ($manager->get($key) !== $value) {
+                    throw new TestException('Invalid result');
+                }
+            }
+            $this->stopwatch->stop($stopwatchName);
+
+            $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
+            $this->addTestResult($testName, $result);
+
+            $manager->flush();
         }
 
         return $this->getTestResults($testName);

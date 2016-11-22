@@ -25,15 +25,18 @@ class MemoryTester extends Tester
                 $manager->addVisitor($visitor);
             }
             $memoryUsageAfter = $manager->getUsedMemory();
-            $manager->flush();
+            $visitorsCount = $manager->countUniqueVisitors();
 
             $result = new VisitorsCounterTestResult(
                 $this->getIterations(),
+                $visitorsCount,
                 $manager,
                 $memoryUsageBefore,
                 $memoryUsageAfter
             );
             $this->addTestResult($testName, $result);
+
+            $manager->flush();
         }
 
         return $this->getTestResults($testName);

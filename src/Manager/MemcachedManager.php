@@ -105,7 +105,7 @@ class MemcachedManager implements KeyValueManagerInterface
     public function addVisitor(string $visitor)
     {
         if ($this->memcached->add($visitor, '')) {
-            $this->memcached->increment(KeyValueManagerInterface::VISITOR_COUNTER_NAME, 1, 0);
+            $this->memcached->increment(KeyValueManagerInterface::VISITOR_COUNTER_NAME, 1, 1);
         }
     }
 
