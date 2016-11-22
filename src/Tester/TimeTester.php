@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace App;
+namespace App\Tester;
 
 use App\Manager\KeyValueManagerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;

@@ -18,10 +18,6 @@ $tester = new MemoryTester($managers, 100000);
 
 //$managers[0]->getUsedMemory();
 
-/** @var MemcachedManager $m */
-$m = $managers[1];
-$m->getUsedMemory();
-
 
 //$result1 = $tester->getValueTest();
 //$result2 = $tester->incrementationTest();
@@ -29,6 +25,7 @@ $m->getUsedMemory();
 
 $tester->uniqueVisitorsCounterTest();
 
+var_dump($tester->getAllTestsResults());
 
 //var_dump($result1);
 //var_dump($result2);
