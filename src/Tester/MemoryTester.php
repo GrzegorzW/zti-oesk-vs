@@ -10,14 +10,11 @@ use App\Result\VisitorsCountResult;
 class MemoryTester extends Tester
 {
     /**
+     * @param string $testName
      * @return array
-     * @throws \InvalidArgumentException
-     * @throws TestException
      */
-    public function uniqueVisitorsCounterTest(): array
+    public function uniqueVisitorsCounterTest($testName = 'uniqueVisitorsCounter'): array
     {
-        $testName = 'uniqueVisitorsCounter';
-
         /** @var KeyValueManagerInterface $manager */
         foreach ($this->getManagers() as $manager) {
             $manager->flush();

@@ -28,13 +28,12 @@ class TimeTester extends Tester
     }
 
     /**
-     * @throws \App\TestException
-     * @throws \InvalidArgumentException
+     * @param string $testName
+     * @return array
+     * @throws TestException
      */
-    public function getValueTest(): array
+    public function getValueTest($testName = 'getValue'): array
     {
-        $testName = 'getValue';
-
         $testingKey = $this->getRandomChars();
         $testingValue = $this->getRandomChars();
 
@@ -63,13 +62,12 @@ class TimeTester extends Tester
     }
 
     /**
-     * @throws \App\TestException
-     * @throws \InvalidArgumentException
+     * @param string $testName
+     * @return array
+     * @throws TestException
      */
-    public function incrementationTest(): array
+    public function incrementationTest($testName = 'incrementation'): array
     {
-        $testName = 'incrementation';
-
         $testingKey = $this->getRandomChars();
 
         /** @var KeyValueManagerInterface $manager */
@@ -98,17 +96,16 @@ class TimeTester extends Tester
 
     /**
      * @param int $keysAmount
+     * @param string $testName
      * @return array
      * @throws \InvalidArgumentException
      * @throws TestException
      */
-    public function getMultiTest(int $keysAmount): array
+    public function getMultiTest(int $keysAmount, $testName = 'multiGet'): array
     {
         if ($keysAmount < 1) {
             throw new \InvalidArgumentException('Keys amount cannot be lest than 1.');
         }
-
-        $testName = 'multiGet';
 
         $items = [];
         for ($i = 0; $i < $keysAmount; $i++) {

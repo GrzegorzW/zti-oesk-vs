@@ -102,4 +102,12 @@ abstract class Tester
     {
         return isset($this->results[$testName]) ? $this->results[$testName] : [];
     }
+
+    /**
+     * @return array
+     */
+    public function getAllTestsResults(): array
+    {
+        return $this->results;
+    }
 }
