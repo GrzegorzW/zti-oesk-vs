@@ -16,13 +16,10 @@ $managers = [new RedisManager($host, $redisPort), new MemcachedManager($host, $m
 
 $tester = new MemoryTester($managers, 1000);
 
-$tester->uniqueVisitorsCounterTest();
-
-
-var_dump($tester->getAllTestsResults());exit;
+$tester->uniqueVisitorsCounterTest('uniqueVisitors');
 
 /** @var \App\Result\VisitorsCounterTestResult $item */
-foreach ($tester->getAllTestsResults() as $item) {
+foreach ($tester->getTestResults('uniqueVisitors') as $item) {
     var_dump($item->getStorageName());
     var_dump($item->getDiff());
     var_dump($item->getVisitorsCountError());
