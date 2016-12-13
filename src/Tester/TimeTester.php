@@ -7,7 +7,6 @@ use App\Manager\KeyValueManagerInterface;
 use App\Result\TimeTestResult;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-
 class TimeTester extends Tester
 {
     /**
@@ -18,23 +17,25 @@ class TimeTester extends Tester
     /**
      * Tester constructor.
      * @param array $managers
-     * @param $iterations
+     * @param Stopwatch $stopwatch
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $managers, $iterations)
+    public function __construct(array $managers, Stopwatch $stopwatch)
     {
-        parent::__construct($managers, $iterations);
-        $this->stopwatch = new Stopwatch();
+        parent::__construct($managers);
+        $this->stopwatch = $stopwatch;
     }
 
     /**
+     * @param int $iterations
      * @param string $testName
      * @return array
      * @throws \InvalidArgumentException
      * @throws TestException
      */
-    public function getValueTest($testName = 'getValue'): array
+    public function getValueTest(int $iterations, $testName = 'getValue'): array
     {
+        $this->checkIterations($iterations);
         $testingKey = $this->getRandomChars();
         $testingValue = $this->getRandomChars();
 
@@ -45,7 +46,7 @@ class TimeTester extends Tester
 
             $stopwatchName = $this->getRandomChars();
             $this->stopwatch->start($stopwatchName);
-            for ($i = 0; $i < $this->getIterations(); $i++) {
+            for ($i = 0; $i < $iterations; $i++) {
                 $manager->get($testingKey);
             }
             $this->stopwatch->stop($stopwatchName);
@@ -54,7 +55,7 @@ class TimeTester extends Tester
                 throw new TestException('Invalid test result.');
             }
 
-            $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
+            $result = new TimeTestResult($iterations, $manager, $this->stopwatch->getEvent($stopwatchName));
             $this->addTestResult($testName, $result);
 
             $manager->flush();
@@ -64,13 +65,15 @@ class TimeTester extends Tester
     }
 
     /**
+     * @param int $iterations
      * @param string $testName
      * @return array
      * @throws \InvalidArgumentException
      * @throws TestException
      */
-    public function incrementationTest($testName = 'incrementation'): array
+    public function incrementationTest(int $iterations, $testName = 'incrementation'): array
     {
+        $this->checkIterations($iterations);
         $testingKey = $this->getRandomChars();
 
         /** @var KeyValueManagerInterface $manager */
@@ -80,16 +83,16 @@ class TimeTester extends Tester
 
             $stopwatchName = $this->getRandomChars();
             $this->stopwatch->start($stopwatchName);
-            for ($i = 0; $i < $this->getIterations(); $i++) {
+            for ($i = 0; $i < $iterations; $i++) {
                 $manager->increment($testingKey);
             }
             $this->stopwatch->stop($stopwatchName);
 
-            if ((int)$manager->get($testingKey) !== $this->getIterations()) {
+            if ((int)$manager->get($testingKey) !== $iterations) {
                 throw new TestException('Invalid test result.');
             }
 
-            $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
+            $result = new TimeTestResult($iterations, $manager, $this->stopwatch->getEvent($stopwatchName));
             $this->addTestResult($testName, $result);
 
             $manager->flush();
@@ -99,14 +102,17 @@ class TimeTester extends Tester
     }
 
     /**
+     * @param int $iterations
      * @param int $keysAmount
      * @param string $testName
      * @return array
      * @throws \InvalidArgumentException
      * @throws TestException
      */
-    public function getMultiTest(int $keysAmount, $testName = 'multiGet'): array
+    public function getMultiTest(int $iterations, int $keysAmount, $testName = 'multiGet'): array
     {
+        $this->checkIterations($iterations);
+
         if ($keysAmount < 1) {
             throw new \InvalidArgumentException('Keys amount cannot be lest than 1.');
         }
@@ -124,7 +130,7 @@ class TimeTester extends Tester
 
             $stopwatchName = $this->getRandomChars();
             $this->stopwatch->start($stopwatchName);
-            for ($i = 0; $i < $this->getIterations(); $i++) {
+            for ($i = 0; $i < $iterations; $i++) {
                 $manager->getMulti($keys);
             }
             $this->stopwatch->stop($stopwatchName);
@@ -133,7 +139,7 @@ class TimeTester extends Tester
                 throw new TestException('Invalid test result.');
             }
 
-            $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
+            $result = new TimeTestResult($iterations, $manager, $this->stopwatch->getEvent($stopwatchName));
             $this->addTestResult($testName, $result);
 
             $manager->flush();
@@ -143,15 +149,18 @@ class TimeTester extends Tester
     }
 
     /**
+     * @param int $iterations
      * @param string $testName
      * @return array
      * @throws \InvalidArgumentException
      * @throws TestException
      */
-    public function getRandomValuesTest($testName = 'getRandomValues'): array
+    public function getRandomValuesTest(int $iterations, $testName = 'getRandomValues'): array
     {
+        $this->checkIterations($iterations);
+
         $testingArray = [];
-        for ($i = 0; $i < $this->getIterations(); $i++) {
+        for ($i = 0; $i < $iterations; $i++) {
             $testingArray[$this->getRandomChars()] = $this->getRandomChars();
         }
 
@@ -169,7 +178,7 @@ class TimeTester extends Tester
             }
             $this->stopwatch->stop($stopwatchName);
 
-            $result = new TimeTestResult($this->getIterations(), $manager, $this->stopwatch->getEvent($stopwatchName));
+            $result = new TimeTestResult($iterations, $manager, $this->stopwatch->getEvent($stopwatchName));
             $this->addTestResult($testName, $result);
 
             $manager->flush();

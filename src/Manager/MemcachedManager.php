@@ -5,7 +5,6 @@ namespace App\Manager;
 
 use Memcached;
 
-
 class MemcachedManager implements KeyValueManagerInterface
 {
     /** @var  Memcached */

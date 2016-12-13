@@ -6,21 +6,22 @@ namespace App\Tester;
 use App\Manager\KeyValueManagerInterface;
 use App\Result\VisitorsCounterTestResult;
 
-
 class MemoryTester extends Tester
 {
     /**
+     * @param int $iterations
      * @param string $testName
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function uniqueVisitorsCounterTest($testName = 'uniqueVisitorsCounter'): array
+    public function uniqueVisitorsCounterTest(int $iterations, $testName = 'uniqueVisitorsCounter'): array
     {
+        $this->checkIterations($iterations);
         /** @var KeyValueManagerInterface $manager */
         foreach ($this->getManagers() as $manager) {
             $manager->flush();
             $memoryUsageBefore = $manager->getUsedMemory();
-            for ($i = 0; $i < $this->getIterations(); $i++) {
+            for ($i = 0; $i < $iterations; $i++) {
                 $visitor = $this->getRandomChars();
                 $manager->addVisitor($visitor);
             }
@@ -28,7 +29,7 @@ class MemoryTester extends Tester
             $visitorsCount = $manager->countUniqueVisitors();
 
             $result = new VisitorsCounterTestResult(
-                $this->getIterations(),
+                $iterations,
                 $visitorsCount,
                 $manager,
                 $memoryUsageBefore,

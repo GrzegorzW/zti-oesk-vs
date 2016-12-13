@@ -5,7 +5,6 @@ namespace App\Manager;
 
 use Redis;
 
-
 class RedisManager implements KeyValueManagerInterface
 {
     /** @var Redis */

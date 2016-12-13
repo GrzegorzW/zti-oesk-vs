@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Manager;
 
-
 interface KeyValueManagerInterface
 {
     public function set(string $key, string $value);

@@ -5,20 +5,19 @@ namespace App\Result;
 
 use App\Manager\KeyValueManagerInterface;
 
-
 class MemoryTestResult extends TestResult
 {
     /** @var int */
-    private $memoryUsageBefore;
+    protected $memoryUsageBefore;
     /** @var int */
-    private $memoryUsageAfter;
+    protected $memoryUsageAfter;
 
-    public function __construct(int $iterations,
-                                KeyValueManagerInterface $manager,
-                                int $memoryUsageBefore,
-                                int $memoryUsageAfter
-    )
-    {
+    public function __construct(
+        int $iterations,
+        KeyValueManagerInterface $manager,
+        int $memoryUsageBefore,
+        int $memoryUsageAfter
+    ) {
         parent::__construct($iterations, $manager);
         $this->memoryUsageBefore = $memoryUsageBefore;
         $this->memoryUsageAfter = $memoryUsageAfter;
@@ -46,5 +45,10 @@ class MemoryTestResult extends TestResult
     public function getDiff(): int
     {
         return (int)abs($this->memoryUsageAfter - $this->memoryUsageBefore);
+    }
+
+    public function getPropertiesToPrint(): array
+    {
+        return array_merge(parent::getPropertiesToPrint(), ['memoryUsageBefore', 'memoryUsageAfter']);
     }
 }

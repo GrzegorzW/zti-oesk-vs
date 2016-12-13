@@ -6,19 +6,12 @@ namespace App\Tester;
 use App\Manager\KeyValueManagerInterface;
 use App\Result\TestResult;
 
-
 abstract class Tester
 {
     /**
      * @var array
      */
     private $managers = [];
-
-    /**
-     * Number of iterations
-     * @var integer
-     */
-    private $iterations;
 
     /**
      * @var array
@@ -28,10 +21,9 @@ abstract class Tester
     /**
      * Tester constructor.
      * @param array $managers
-     * @param $iterations
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $managers, $iterations)
+    public function __construct(array $managers)
     {
         foreach ($managers as $manager) {
             if (!$manager instanceof KeyValueManagerInterface) {
@@ -40,18 +32,6 @@ abstract class Tester
 
             $this->managers[] = $manager;
         }
-
-        $this->checkIterations($iterations);
-
-        $this->iterations = $iterations;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getRandomChars(): string
-    {
-        return hash('sha512', random_bytes(random_int(16, 128)) . random_int(PHP_INT_MIN, PHP_INT_MAX));
     }
 
     /**
@@ -63,27 +43,6 @@ abstract class Tester
         if ($iterations < 1) {
             throw new \InvalidArgumentException('Wrong number of iterations');
         }
-    }
-
-    /**
-     * @param int $iterations
-     * @throws \InvalidArgumentException
-     */
-    public function setIterations(int $iterations)
-    {
-        $this->checkIterations($iterations);
-
-        $this->iterations = $iterations;
-    }
-
-    protected function getManagers(): array
-    {
-        return $this->managers;
-    }
-
-    protected function getIterations(): int
-    {
-        return $this->iterations;
     }
 
     /**
@@ -110,5 +69,18 @@ abstract class Tester
     public function getAllTestsResults(): array
     {
         return $this->results;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRandomChars(): string
+    {
+        return hash('sha512', random_bytes(random_int(16, 128)) . random_int(PHP_INT_MIN, PHP_INT_MAX));
+    }
+
+    protected function getManagers(): array
+    {
+        return $this->managers;
     }
 }

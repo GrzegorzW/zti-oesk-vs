@@ -4,16 +4,16 @@ declare(strict_types = 1);
 namespace App\Result;
 
 use App\Manager\KeyValueManagerInterface;
+use App\Printer\Printable;
 
-
-abstract class TestResult
+abstract class TestResult implements Printable
 {
     /** @var int */
-    private $iterations;
+    protected $iterations;
     /** @var string */
-    private $storageName;
+    protected $storageName;
     /** @var string */
-    private $storageVersion;
+    protected $storageVersion;
 
     public function __construct(int $iterations, KeyValueManagerInterface $manager)
     {
@@ -52,5 +52,10 @@ abstract class TestResult
     public function getStorageVersion(): string
     {
         return $this->storageVersion;
+    }
+
+    public function getPropertiesToPrint(): array
+    {
+        return ['storageName', 'storageVersion', 'iterations'];
     }
 }
